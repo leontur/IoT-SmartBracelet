@@ -12,18 +12,18 @@ too far.
 
 ### How it works ###
 
-The operation of the smart bracelet couple is as follows:
+The operation of the smart bracelet couple is as follows:<br/>
 *Pairing phase, that it used to uniquely couple the
-two devices. 
+two devices.<br/>
 *Operation mode: in this phase, the parent’s bracelet listen for messages
 on the radio and accepts only messages coming from the child’s
-bracelet.
+bracelet.<br/>
 *Alert Mode: upon reception of an INFO message, the parent’s bracelet
 reads the content of the message. If the kinematic status is FALLING,
 the bracelet sends a FALL alarm, reporting the position X,Y of the
 children. If the parent’s bracelet does not receive any message, after
 one minute from the last received message a MISSING alarm is sent
-reporting the last position received.
+reporting the last position received.<br/>
 
 ### Authors ###
 
