@@ -1,0 +1,27 @@
+
+
+USEFUL COMMANDS
+
+----------------------------------
+
+TINYOS BUILD
+make micaz
+
+SKYMOTE build for use in cooja
+make telosb
+
+TOSSIM
+make micaz sim
+
+----------------------------------
+
+>tossim live (serial forwarder)
+make micaz sim-sf
+
+>then start 2 listeners 
+>and run simulation
+
+
+----------------------------------
+TOSSIM PYTHON RUN
+python simulation.py
