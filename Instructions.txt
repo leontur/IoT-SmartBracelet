@@ -1,0 +1,118 @@
+
+ SMART BRACELET
+________________________________________________
+
+   Politecnico di Milano
+   Internet of Things Course
+
+   Turchi - Paci 
+   Milan, 09/2016
+________________________________________________
+
+   TINY OS / TOSSIM / RED NODE
+
+    HOW TO GUIDE
+         &
+    USEFUL COMMANDS
+
+********************************************************************************
+
+1.  Open a terminal and go into the SmartBracelet folder
+
+2.  To build using TinyOS use a related command (A)
+
+3.  To run simulation with TOSSIM
+    and show results on terminal or save to log file use (B)
+ 
+4.  To run simulation with Cooja
+    open the program and import the compiled (telosb) .exe as a skymote
+
+5.  To use Node-Red, start its GUI and import the model (C)
+
+6.  Setup the virtual serial port forwarder (D)
+
+7.  Useful commands
+
+--------------------------------------------------------------------
+
+(A)
+
+BUILD COMMANDS
+
+TINYOS BUILD
+ make micaz
+
+SKYMOTE build (for simulation-use in cooja)
+ make telosb
+
+TOSSIM SIMULATION
+ make micaz sim
+
+TOSSIM LIVE (serial forwarder)
+ make micaz sim-sf
+
+--------------------------------------------------------------------
+
+(B)
+
+TOSSIM SIMULATION SCRIPT (PYTHON RUN)
+
+ python simulation.py
+
+Note: the simulation log will be saved in the same folder of the project as a .txt
+Note: the usage of the serial forwarding need the step (D)
+
+--------------------------------------------------------------------
+
+(C)
+
+NODE RED
+ start> node-red
+ opengui> localhost:1880
+
+TRAIN MODEL TO IMPORT:
+[{"id":"67cb3e35.6b5c2","type":"function","name":"AlarmFilter","func":"//check if the message contains an alarm\nif(msg.payload.indexOf(\"ALARM\") >= 0) {\n\t//cut the message\n\tmsg.payload = msg.payload.substring(20, msg.payload.length);\n\treturn msg;\n}\nreturn null;","outputs":1,"x":384,"y":94,"z":"6897ddc3.3e6d3c","wires":[["2da612df.5e2c8e"]]}]
+
+--------------------------------------------------------------------
+
+(D)
+
+VIRTUAL SERIAL PORT TO TCP FORWARDING
+
+ 1. Use socat to bind a virtual serial port to a TCP forwarder.
+    In another terminal that needs to remain open, type (as ROOT user):
+
+    socat pty,link=/dev/ttyS0,raw tcp:127.0.0.1:60001&
+
+     ..that will forward the content written in the serial ttyS0 to the loopback IP
+     ..note that the node-red listener must be already open to accept this connection
+
+ 2. In another terminal, execute (B) (as ROOT user) with the serial port option.
+
+     ..all the traffic from the output of tossim will be forwarded via TCP to node-red
+     ..you can see the Alarm messages in the debug panel in node-red gui
+
+--------------------------------------------------------------------
+
+(E)
+
+VARIOUS USEFUL COMMANDS
+
+get the current terminal virtual serial port
+ tty
+
+bind the open pty to another in linux
+ socat -d -d pty,raw,echo=0 pty,raw,echo=0
+
+send to serial
+ echo hello >/dev/pts/7
+
+enable terminal (virtual serial port):
+ add line:
+  virtualcom0
+  ttypersonalserial
+  etc..
+ in file /etc/securetty
+ (using: nano securetty)
+ (remember that this new tty could be used only by a root!)
+ (ports: http://tinyos.stanford.edu/tinyos-wiki/index.php/Mote-PC_serial_communication_and_SerialForwarder_(TOS_2.1.1_and_later))

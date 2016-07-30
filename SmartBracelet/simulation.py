@@ -6,16 +6,17 @@ print "********************************************";
 
 import sys;
 import time;
+import os, pty, serial
 
 from TOSSIM import *;
 
 t = Tossim([]);
 
-
+#Imports
 topofile="topology.txt";
 modelfile="meyer-heavy.txt";
 
-
+#Topology init
 print "Initializing mac....";
 mac = t.mac();
 print "Initializing radio channels....";
@@ -25,13 +26,25 @@ print "    using noise file:",modelfile;
 print "Initializing simulator....";
 t.init();
 
-
+#Simulation output file opening
 simulation_outfile = "simulation.txt";
 print "Saving sensors simulation output to:", simulation_outfile;
 simulation_out = open(simulation_outfile, "w");
 
-out = open(simulation_outfile, "w");
-#out = sys.stdout;
+#Output selector
+print "\n";
+print "> Insert output format (1 terminal / 2 file log / 3 serial output) ..";
+mode=int(raw_input('format:'))
+
+if mode==1:
+    #terminal
+    out = sys.stdout;
+elif mode==2:
+    #file
+    out = open(simulation_outfile, "w");
+elif mode==3:
+    #serial (first file, then forward)
+    out = open(simulation_outfile, "w");
 
 #Add debug channel
 print "Activate debug message on channel init"
@@ -47,7 +60,7 @@ t.addChannel("radioDatagram",out);
 print "Activate debug message on channel node"
 t.addChannel("node",out);
 
-
+#Nodes creation
 print "Creating node 1...";
 node1 =t.getNode(1);
 time1 = 0*t.ticksPerSecond();
@@ -73,6 +86,7 @@ node4.bootAtTime(time4);
 print ">>>Will boot at time", time4/t.ticksPerSecond(), "[sec]";
 
 
+#Radio creation
 print "Creating radio channels..."
 f = open(topofile, "r");
 lines = f.readlines()
@@ -83,7 +97,7 @@ for line in lines:
     radio.add(int(s[0]), int(s[1]), float(s[2]))
 
 
-#Creazione del modello di canale
+#Channel model creation (and noises)
 print "Initializing Closest Pattern Matching (CPM)...";
 noise = open(modelfile, "r")
 lines = noise.readlines()
@@ -110,15 +124,28 @@ for i in range(1, 5):
     print ">>>Creating noise model for node:",i;
     t.getNode(i).createNoiseModel()
 
+#START
+print "Start simulation with TOSSIM! \n\n";
 
-print "Start simulation with TOSSIM! \n\n\n";
-
-
+#SIMULATION CONSTRAINTS AND SCENARIOS
 for i in range(0,5000):
 	if (i == 3000): 
 		node2.turnOff();
-		print "\n\n\n>>SHUTTING DOWN NODE 2..<<\n\n\n"
+		print "\n>>SHUTTING DOWN NODE 2..<<\n"
 	t.runNextEvent()
 	
-print "\n\n\nSimulation finished!";
+print "\nSimulation finished!\n";
 
+#serial forwarder
+if mode==3:
+    #configure the serial connections
+    ser = serial.Serial('/dev/ttyS0', 9600, rtscts=True, dsrdtr=True)  # open serial port
+    print " >>SERIAL FORWARDER>> serial port used: ", ser.portstr   # check which port was really used
+    print "\n >>remind to use this as a root!\n"
+    #ser.write("\n >serial test ALARM! \n go go ALARM! go :) ")  # write test string
+    with open('simulation.txt') as fp:
+        for line in fp:
+            ser.write(line);
+    ser.close(); # close serial port
+
+#END
