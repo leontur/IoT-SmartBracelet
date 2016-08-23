@@ -1,5 +1,5 @@
 # IoT-SmartBracelet
-Politecnico di Milano - Internet of Things Project - TinyOS Smart Bracelet development & simulation with TOSSIM
+Politecnico di Milano - Internet of Things Project - TinyOS Smart Bracelet development & simulation with TOSSIM/Cooja/Node-Red
 
 
 ### Info ###
