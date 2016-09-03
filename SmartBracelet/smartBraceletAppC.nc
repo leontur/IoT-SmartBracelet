@@ -24,9 +24,8 @@ implementation {
 	components LedsC;
 
 	//Prints
-	//components SerialStartC;
-	//components SerialPrintfC;
-	//components SerialActiveMessageC as AM;
+	components SerialStartC;
+	components SerialActiveMessageC as AM;
 	
 	/////////////////////////////////////////////////////////
 	//Interfaces

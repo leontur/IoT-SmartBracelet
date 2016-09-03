@@ -9,7 +9,7 @@ ________________________________________________
    Milan, 09/2016
 ________________________________________________
 
-   TINY OS / TOSSIM / RED NODE
+   TINY OS / TOSSIM / NODE RED
 
     HOW TO GUIDE
          &
@@ -50,6 +50,8 @@ TOSSIM SIMULATION
 
 TOSSIM LIVE (serial forwarder)
  make micaz sim-sf
+
+(note that these commands not work in root mode)
 
 --------------------------------------------------------------------
 
