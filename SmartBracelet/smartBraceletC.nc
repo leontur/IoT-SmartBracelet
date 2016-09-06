@@ -26,7 +26,10 @@ module smartBraceletC{
 		interface Timer<TMilli> as Timer2;
 
 		//timer3: alarm after 60 sec
-		interface Timer<TMilli> as Timer3;		
+		interface Timer<TMilli> as Timer3;
+
+		//timer4: reboot after 120 sec
+		//interface Timer<TMilli> as Timer4;		
 	}
 }
 
